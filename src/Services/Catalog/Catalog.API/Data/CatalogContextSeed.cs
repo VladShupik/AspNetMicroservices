@@ -2,6 +2,8 @@
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Catalog.API.Data
 {
@@ -9,8 +11,9 @@ namespace Catalog.API.Data
     {
         public static void SeedData(IMongoCollection<Product> productCollection)
         {
-            bool existsProduct = productCollection.Find(p => true).Any();
-            if (!existsProduct) {
+            bool existProduct = productCollection.Find(p => true).Any();
+            if (!existProduct)
+            {
                 productCollection.InsertManyAsync(GetPreconfiguredProducts());
             }
         }

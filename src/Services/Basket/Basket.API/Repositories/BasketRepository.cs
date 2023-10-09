@@ -12,13 +12,13 @@ namespace Basket.API.Repositories
 
         public BasketRepository(IDistributedCache redisCache)
         {
-            _redisCache = redisCache;
+            _redisCache = redisCache ?? throw new ArgumentNullException(nameof(redisCache));
         }
 
         public async Task<ShoppingCart> GetBasket(string userName)
         {
             var basket = await _redisCache.GetStringAsync(userName);
-
+            
             if (String.IsNullOrEmpty(basket))
                 return null;
 
@@ -32,6 +32,9 @@ namespace Basket.API.Repositories
             return await GetBasket(basket.UserName);
         }
 
-        public async Task DeleteBasket(string userName) => await _redisCache.RemoveAsync(userName);
+        public async Task DeleteBasket(string userName)
+        {
+            await _redisCache.RemoveAsync(userName);
+        }
     }
 }
